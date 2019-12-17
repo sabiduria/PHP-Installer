@@ -12,6 +12,7 @@ switch ($need){
     case 'Step1':
         $installer = new Installer($host, $username, $password, $db_name);
         if ($installer->createDatabase()){
+            $installer->createConfigFile();
             header('Location:../installer.php?step=2');
         } else{
             header('Location:../installer.php?step=except');
