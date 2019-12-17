@@ -32,8 +32,13 @@ class installer
     public function createDatabase(){
         try {
             $connexion = new PDO("mysql:host=$this->host", $this->username, $this->password);
-            $connexion->exec("CREATE DATABASE `$this->db_name`;")
-            or die(print_r($connexion->errorInfo(), true));
+            if($connexion->exec("CREATE DATABASE `$this->db_name`;")){
+                return true;
+            } else{
+                return false;
+                //die(print_r($connexion->errorInfo(), true));
+            }
+
 
         } catch (PDOException $e) {
             die("DB ERROR: ". $e->getMessage());
