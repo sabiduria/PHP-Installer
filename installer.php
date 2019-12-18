@@ -30,7 +30,7 @@
 <div class="step2">
     <h3>Script Importation</h3>
     <form method="post" action="controller/installer.php" enctype="multipart/form-data">
-        <input type="file" name="host" placeholder="ex. localhost"><br><br>
+        <input type="file" name="scriptFile"><br><br>
         <button type="submit" name="need" value="Step2">Validate</button>
     </form>
 </div>

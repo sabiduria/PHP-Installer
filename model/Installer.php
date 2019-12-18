@@ -12,6 +12,7 @@ class installer
     private $username;
     private $password;
     private $db_name;
+    static $FILE_UPLOADED;
 
     /**
      * installer constructor.
@@ -27,7 +28,6 @@ class installer
         $this->password = $password;
         $this->db_name = $db_name;
     }
-
 
     public function createDatabase(){
         try {
@@ -61,5 +61,30 @@ if (!defined('DB_PWD')) define('DB_PWD', '".$this->password."');
 if (!defined('DB_NAME')) define('DB_NAME', '".$this->db_name."');
 if (!defined('DSN')) define('DSN', 'mysql:host='.DB_SERVER.'; dbname='.DB_NAME);
 ";
+    }
+
+    public function importScript(){
+        $connexion=Connexion::getConnexion();
+        $query = file_get_contents($this->uploader());
+        $stmt = $connexion->prepare($query);
+        if ($stmt->execute())
+            return true;
+        else
+            return false;
+    }
+
+    public function uploader(){
+        $fileTmpPath = $_FILES['scriptFile']['tmp_name'];
+        $fileName = $_FILES['scriptFile']['name'];
+        $fileSize = $_FILES['scriptFile']['size'];
+        $fileType = $_FILES['scriptFile']['type'];
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
+        $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+        $uploadFileDir = '../config/';
+        $dest_path = $uploadFileDir . $newFileName;
+        move_uploaded_file($fileTmpPath, $dest_path);
+
+        return $dest_path;
     }
 }
